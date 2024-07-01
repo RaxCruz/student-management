@@ -1,0 +1,177 @@
+// This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
+// https://nextjs.org/learn/dashboard-app/fetching-data
+const users = [
+  {
+  id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
+  student_id: "0001",
+  name:"王成立",
+  image_url: "",
+  email: "ske234@gmail.com",
+  person_id: "T121852584",
+  phone_1: "05-2846586",
+  phone_2: "",
+  mobile: "098254565",
+  emergency_phone: "096542236",
+  emergency_contact: "王海其",
+  residence_addr: "嘉義市國華街23號",
+  mailing_addr: "嘉義市國華街23號",
+  },
+  {
+  id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
+  student_id: "0002",
+  name:"蕭其耀",
+  image_url: "",
+  email: "guuid3558@gmail.com",
+  person_id: "Q123644366",
+  phone_1: "05-2352698",
+  phone_2: "",
+  mobile: "0975195243",
+  emergency_phone: "0965244585",
+  emergency_contact: "黃露春",
+  residence_addr: "嘉義市吳鳳南路66號4F",
+  mailing_addr: "嘉義市吳鳳南路66號4F",
+  },
+  {
+  id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
+  student_id: "0003",
+  name:"許淑芬",
+  image_url: "",
+  email: "becky0989@gmail.com",
+  person_id: "T223535698",
+  phone_1: "05-2536984",
+  phone_2: "05-3624857",
+  mobile: "0966587154",
+  emergency_phone: "0945386254",
+  emergency_contact: "許美華",
+  residence_addr: "嘉義市竹圍路18號",
+  mailing_addr: "嘉義市竹圍路18號",
+  },
+];
+
+const score = [
+  {
+    id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
+    student_id: "0001",
+    school_year: 113,
+    semester: 1,
+    chinese_score: 66,
+    math_score: 75,
+    english_score: 75,
+  },
+  {
+    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
+    student_id: "0002",
+    school_year: 113,
+    semester: 1,
+    chinese_score: 29,
+    math_score: 44,
+    english_score: 53,
+  },
+  {
+    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
+    student_id: "0003",
+    school_year: 113,
+    semester: 1,
+    chinese_score: 100,
+    math_score: 99,
+    english_score: 97,
+  },
+];
+
+const invoices = [
+  {
+    customer_id: customers[0].id,
+    amount: 15795,
+    status: 'pending',
+    date: '2022-12-06',
+  },
+  {
+    customer_id: customers[1].id,
+    amount: 20348,
+    status: 'pending',
+    date: '2022-11-14',
+  },
+  {
+    customer_id: customers[4].id,
+    amount: 3040,
+    status: 'paid',
+    date: '2022-10-29',
+  },
+  {
+    customer_id: customers[3].id,
+    amount: 44800,
+    status: 'paid',
+    date: '2023-09-10',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 34577,
+    status: 'pending',
+    date: '2023-08-05',
+  },
+  {
+    customer_id: customers[2].id,
+    amount: 54246,
+    status: 'pending',
+    date: '2023-07-16',
+  },
+  {
+    customer_id: customers[0].id,
+    amount: 666,
+    status: 'pending',
+    date: '2023-06-27',
+  },
+  {
+    customer_id: customers[3].id,
+    amount: 32545,
+    status: 'paid',
+    date: '2023-06-09',
+  },
+  {
+    customer_id: customers[4].id,
+    amount: 1250,
+    status: 'paid',
+    date: '2023-06-17',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 8546,
+    status: 'paid',
+    date: '2023-06-07',
+  },
+  {
+    customer_id: customers[1].id,
+    amount: 500,
+    status: 'paid',
+    date: '2023-08-19',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 8945,
+    status: 'paid',
+    date: '2023-06-03',
+  },
+  {
+    customer_id: customers[2].id,
+    amount: 1000,
+    status: 'paid',
+    date: '2022-06-05',
+  },
+];
+
+const revenue = [
+  { month: 'Jan', revenue: 2000 },
+  { month: 'Feb', revenue: 1800 },
+  { month: 'Mar', revenue: 2200 },
+  { month: 'Apr', revenue: 2500 },
+  { month: 'May', revenue: 2300 },
+  { month: 'Jun', revenue: 3200 },
+  { month: 'Jul', revenue: 3500 },
+  { month: 'Aug', revenue: 3700 },
+  { month: 'Sep', revenue: 2500 },
+  { month: 'Oct', revenue: 2800 },
+  { month: 'Nov', revenue: 3000 },
+  { month: 'Dec', revenue: 4800 },
+];
+
+export { users, score, invoices, revenue };
