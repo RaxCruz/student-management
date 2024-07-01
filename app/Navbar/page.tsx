@@ -50,14 +50,20 @@ export default function NavBar(){
         }, []);
 
         const formattedTime = time.toLocaleTimeString();
-        const now = new Date();
-        const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
+        const date = new Date('2024-07-01'); // Example: creating a Date object for July 1, 2024
+
+// Convert Gregorian year to ROC year
+const rocYear = date.getFullYear() - 1911;
+
+// Extract month and day, ensuring they are zero-padded
+const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed, so add 1
+const day = date.getDate().toString().padStart(2, '0');
+
+// Format ROC date string
+const taiwanDate = `${rocYear}/${month}/${day}`;
+   
           
-          const taiwanDate = now.toLocaleString('zh-TW',options);
+         
 return(
     <div className="hidden border-r bg-muted/40 md:block skicky top-0 ">
         <div className="flex h-full max-h-screen flex-col gap-2">
