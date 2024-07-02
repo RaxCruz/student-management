@@ -1,19 +1,6 @@
 import {
   Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
   Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  Rabbit,
-  Settings,
-  Turtle,
-  Bird,
-  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,11 +12,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 import Link from "next/link";
-
-import { getAllUsers } from "../lib/data";
 import TimeCard from "@/components/time-card";
 
 export default async function NavBar() {
@@ -61,14 +45,23 @@ export default async function NavBar() {
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow className="" key={user.id}>
-                  <TableCell>
-                    <div className="font-medium">{user.student_id}</div>
+
+                <TableRow className="" key={user.id} >
+
+                  <TableCell className="font-medium">
+                    <Link href={`/user/${user.student_id}`} >
+                      {user.student_id}
+
+                    </Link>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    {user.name}
+                    <Link href={`/user/${user.student_id}`} >
+                      {user.name}
+                    </Link>
                   </TableCell>
+
                 </TableRow>
+
               ))}
             </TableBody>
           </Table>
