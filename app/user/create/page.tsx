@@ -54,13 +54,14 @@ import onSubmitForm from "@/app/action/submit_form";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import JSConfetti from 'js-confetti'
+import onUpdateForm from "@/app/action/update_form";
 
 const jsConfetti = new JSConfetti()
 
 
 const prisma = new PrismaClient()
 
-export default function Contents() {
+export default function CreateUser({ studentData, id }: { studentData: any, id: any }) {
     const router = useRouter()
     const formSchema = z.object({
         student_id: z.string().min(4, {
@@ -95,31 +96,41 @@ export default function Contents() {
         }),
         img_url: z.string()
     })
+    const defaultValues = studentData ? studentData : {
+        student_id: "",
+        name: "",
+        person_id: "",
+        phone_1: "",
+        phone_2: "",
+        mobile: "",
+        emergency_phone: "",
+        emergency_contact: "",
+        residence_addr: "",
+        mailing_addr: "",
+        img_url: "",
+    }
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            student_id: "",
-            name: "",
-            person_id: "",
-            phone_1: "",
-            phone_2: "",
-            mobile: "",
-            emergency_phone: "",
-            emergency_contact: "",
-            residence_addr: "",
-            mailing_addr: "",
-            img_url: "",
-        },
+        defaultValues: defaultValues
     })
 
     const onMyFormSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
+        if (studentData) {
+            try {
+                await onUpdateForm(values, id);
 
-        try {
-            await onSubmitForm(values);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+            }
+        }
+        else {
+            try {
+                await onSubmitForm(values);
 
-        } catch (error) {
-            console.error('Error submitting form:', error);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+            }
         }
 
         jsConfetti.addConfetti()
@@ -565,9 +576,9 @@ export default function Contents() {
                                 根據需要更新學生的個人資料。確保所有資訊準確無誤後，點擊儲存按鈕以完成更新
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="flex gap-4">
+                        <CardContent className="flex flex-col xl:grid xl:grid-cols-4 gap-4">
                             <Link href="/user/create">
-                                <Button size="sm" >
+                                <Button size="sm" className="w-full">
                                     新增
                                 </Button>
                             </Link>
