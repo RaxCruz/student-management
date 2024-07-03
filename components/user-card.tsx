@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import {
+    ChevronDown,
+    Edit,
+    Eraser,
+    LogOut,
+    MoreHorizontal,
+    PenLine,
+    Pencil,
+    Plus,
     Upload,
 } from "lucide-react";
 import {
@@ -28,7 +36,8 @@ import { useRef } from "react";
 import ReactToPrint from 'react-to-print';
 // import DeleteButton from "./alert-card";
 import dynamic from 'next/dynamic';
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 const DeleteButton = dynamic(
 
     () => import('./alert-card'),
@@ -36,9 +45,16 @@ const DeleteButton = dynamic(
     { ssr: false }
 
 );
+const DeleteScore = dynamic(
 
+    () => import('./delete-score'),
+
+    { ssr: false }
+
+);
 export default function UserCard({ users, scores, formattedID }: { users: any, scores: any, formattedID: any }) {
     const componentRef = useRef(null);
+    const router = useRouter();
     return (
         <main className="flex flex-1  gap-4 p-4 lg:gap-6 lg:p-6">
             <form className="grid flex-1 flex items-start gap-6 overflow-y-scroll relative scrollbar-hide z-30 print:p-4" ref={componentRef}>
@@ -131,6 +147,9 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                 <TableHead className="hidden sm:table-cell">
                                     英文成績
                                 </TableHead>
+                                <TableHead className="hidden sm:table-cell">
+                                    <span className="sr-only">Actions</span>
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -159,9 +178,34 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                             {score.english_score}
                                         </Badge>
                                     </TableCell>
+                                    <TableCell className="sm:table-cell ">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    aria-haspopup="true"
+                                                    size="icon"
+                                                    variant="ghost"
+                                                >
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                    <span className="sr-only">Toggle menu</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem className="cursor-pointer">
+                                                    <Link href={`/score/${score.id}`} className="w-full">
+                                                        <div className="flex items-center"><Edit className="mr-2 h-4 w-4" />編輯</div>
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DeleteScore id={score.id} />
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
                                 </TableRow>
                             ))}
-
+                            <TableRow className="">  <TableCell colSpan={6} className=" text-center cursor-pointer w-full" onClick={() => { router.push(`/score/${users[0].student_id}/create`) }}>
+                                <ChevronDown className="inline-block animate-bounce" />
+                            </TableCell></TableRow>
                         </TableBody>
                     </Table>
                 </fieldset>
