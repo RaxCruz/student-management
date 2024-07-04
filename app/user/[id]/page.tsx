@@ -46,6 +46,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import DeleteButton from "@/components/alert-card";
 import { PrismaClient } from "@prisma/client";
 import UserCard from "@/components/user-card";
+import TimeCard from "@/components/time-card";
 
 const prisma = new PrismaClient();
 
@@ -56,6 +57,7 @@ export default async function UserDetail({ params }: { params: any }) {
   const users = await prisma.user.findMany({
     where: { student_id: formattedID },
   });
+  const allusers = await prisma.user.findMany();
   const scores = await prisma.score.findMany({
     where: { student_id: formattedID },
   });
@@ -72,72 +74,49 @@ export default async function UserDetail({ params }: { params: any }) {
               className="shrink-0 md:hidden"
             >
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
+              <span className="sr-only">學生管理系統</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col">
-            <nav className="grid gap-2 text-lg font-medium">
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold"
-              >
+            <div className="flex-1">
+              <Link href="/" className="flex items-center gap-2 font-semibold">
                 <Package2 className="h-6 w-6" />
-                <span className="sr-only">學生管理系統</span>
+                <span className="">學生管理系統</span>
               </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Home className="h-5 w-5" />
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Package className="h-5 w-5" />
-                Products
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Users className="h-5 w-5" />
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <LineChart className="h-5 w-5" />
-                Analytics
-              </Link>
-            </nav>
-            <div className="mt-auto">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upgrade to Pro</CardTitle>
-                  <CardDescription>
-                    Unlock all features and get unlimited access to our support
-                    team.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button size="sm" className="w-full">
-                    Upgrade
-                  </Button>
-                </CardContent>
-              </Card>
+              <div className="mt-8 p-4">
+                <TimeCard />
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>學號</TableHead>
+                    <TableHead className="hidden sm:table-cell">姓名</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {allusers.map((user) => (
+                    <Link href={`/user/${user.student_id}`} legacyBehavior className="" key={user.id}>
+
+                      <TableRow className="cursor-pointer"  >
+
+                        <TableCell className="font-medium">
+
+                          {user.student_id}
+
+
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+
+                          {user.name}
+
+                        </TableCell>
+
+                      </TableRow>
+
+                    </Link>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </SheetContent>
         </Sheet>

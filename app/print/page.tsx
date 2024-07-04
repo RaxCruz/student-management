@@ -326,9 +326,9 @@ export default function UserDetail({ params }: { params: any }) {
                         x-chunk="dashboard-07-chunk-4"
                     >
                         <CardHeader>
-                            <CardTitle>Product Images</CardTitle>
+                            <CardTitle>個人相片</CardTitle>
                             <CardDescription>
-                                Lipsum dolor sit amet, consectetur adipiscing elit
+                                上傳至多三張個人照片
                             </CardDescription>
                         </CardHeader>
                         <CardContent>

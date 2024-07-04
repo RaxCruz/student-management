@@ -12,8 +12,12 @@ export default async function onDelete(student_id: any) {
                 student_id: student_id
             }
         });
-
-        console.log('Deleted:', deleteResult);
+        const deleteScoreResult = await prisma.score.deleteMany({
+            where: {
+                student_id: student_id
+            }
+        });
+        console.log('Deleted:', deleteResult, deleteScoreResult);
     } catch (error) {
         console.error('Error deleting:', error);
     }

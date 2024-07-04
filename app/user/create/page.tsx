@@ -55,6 +55,9 @@ import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import JSConfetti from 'js-confetti'
 import onUpdateForm from "@/app/action/update_form";
+import TimeCard from "@/components/time-card";
+import { toast } from "@/components/ui/use-toast"
+import { Toaster } from "@/components/ui/toaster";
 
 const jsConfetti = new JSConfetti()
 
@@ -63,6 +66,7 @@ const prisma = new PrismaClient()
 
 export default function CreateUser({ studentData, id }: { studentData: any, id: any }) {
     const router = useRouter()
+
     const formSchema = z.object({
         student_id: z.string().min(4, {
             message: "學生編號須為四位數字",
@@ -115,7 +119,34 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
     })
 
     const onMyFormSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        const differences: any = {};
+        const newuser: any = {}
+        for (let key in values) {
+            if (values.hasOwnProperty(key)) {
+                let chinese_key = ""
+                if (key == 'emergency_contact') chinese_key = '緊急聯絡人'
+                if (key == 'emergency_phone') chinese_key = '緊急聯絡電話'
+                if (key == 'mailing_addr') chinese_key = '通訊地址'
+                if (key == 'mobile') chinese_key = '行動電話'
+                if (key == 'name') chinese_key = '學生姓名'
+                if (key == 'person_id') chinese_key = '身分證號'
+                if (key == 'phone_1') chinese_key = '電話一'
+                if (key == 'phone_2') chinese_key = '電話二'
+                if (key == 'residence_addr') chinese_key = '戶籍地址'
+                if (key == 'student_id') chinese_key = '學生編號'
+                console.log(studentData, "jiji")
+                if (!studentData) {
+                    newuser[chinese_key] = values[key]
+                }
+
+                else if (values[key] !== studentData[key]) {
+
+                    differences[chinese_key] = values[key];
+                }
+
+            }
+        }
+
         if (studentData) {
             try {
                 await onUpdateForm(values, id);
@@ -123,6 +154,28 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
+            if (Object.keys(differences).length === 0) {
+                toast({
+                    title: "成功更改學生資料:",
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                            <code className="text-white">無更新</code>
+                        </pre>
+                    ),
+                    duration: 2000,
+                })
+            } else {
+                toast({
+                    title: "成功更改學生資料:",
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                            <code className="text-white">{JSON.stringify(differences, null, 2)}</code>
+                        </pre>
+                    ),
+                    duration: 2000,
+                })
+            }
+            jsConfetti.addConfetti()
         }
         else {
             try {
@@ -131,10 +184,21 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
+            toast({
+                title: "成功更改學生資料:",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(newuser, null, 2)}</code>
+                    </pre>
+                ),
+                duration: 2000,
+            })
+            jsConfetti.addConfetti()
         }
 
-        jsConfetti.addConfetti()
+
         router.push(`/user/${values.student_id}`)
+
         router.refresh()
     }
 
@@ -153,69 +217,18 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="flex flex-col">
-                        <nav className="grid gap-2 text-lg font-medium">
-                            <Link
-                                href="#"
-                                className="flex items-center gap-2 text-lg font-semibold"
-                            >
-                                <Package2 className="h-6 w-6" />
-                                <span className="sr-only">學生管理系統</span>
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Home className="h-5 w-5" />
-                                Dashboard
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                            >
-                                <ShoppingCart className="h-5 w-5" />
-                                Orders
-                                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                                    6
-                                </Badge>
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Package className="h-5 w-5" />
-                                Products
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Users className="h-5 w-5" />
-                                Customers
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <LineChart className="h-5 w-5" />
-                                Analytics
-                            </Link>
-                        </nav>
-                        <div className="mt-auto">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Upgrade to Pro</CardTitle>
-                                    <CardDescription>
-                                        Unlock all features and get unlimited access to our support
-                                        team.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <Button size="sm" className="w-full">
-                                        Upgrade
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </div>
+                        <SheetContent side="left" className="flex flex-col">
+                            <div className="flex-1">
+                                <Link href="/" className="flex items-center gap-2 font-semibold">
+                                    <Package2 className="h-6 w-6" />
+                                    <span className="">學生管理系統</span>
+                                </Link>
+                                <div className="mt-8 p-4">
+                                    <TimeCard />
+                                </div>
+
+                            </div>
+                        </SheetContent>
                     </SheetContent>
                 </Sheet>
                 <div className="w-full flex-1">
@@ -527,11 +540,12 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                         x-chunk="dashboard-07-chunk-4"
                     >
                         <CardHeader>
-                            <CardTitle>Product Images</CardTitle>
+                            <CardTitle>個人相片</CardTitle>
                             <CardDescription>
-                                Lipsum dolor sit amet, consectetur adipiscing elit
+                                上傳至多三張個人照片
                             </CardDescription>
                         </CardHeader>
+
                         <CardContent>
                             <div className="grid gap-2">
                                 <Image
@@ -593,10 +607,11 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                             </Button>
                         </CardContent>
                     </Card>
+
                 </div>
 
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }
 

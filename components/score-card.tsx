@@ -57,6 +57,8 @@ import JSConfetti from 'js-confetti'
 import onUpdateForm from "@/app/action/update_form";
 import onScoreUpdate from "@/app/action/score_update";
 import onScoreAdd from "@/app/action/score_add";
+import TimeCard from "./time-card";
+import { toast } from "./ui/use-toast";
 
 const jsConfetti = new JSConfetti()
 
@@ -98,13 +100,51 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
     })
 
     const onMyFormSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(scoreData)
+        const differences: any = {};
+        const newscore: any = {}
+        for (let key in values) {
+            if (values.hasOwnProperty(key)) {
+                let chinese_key = ""
+                if (key == 'student_id') chinese_key = '學生編號'
+                if (key == 'school_year') chinese_key = '學年'
+                if (key == 'semester') chinese_key = '學期'
+                if (key == 'chinese_score') chinese_key = '國文成績'
+                if (key == 'math_score') chinese_key = '數學成績'
+                if (key == 'english_score') chinese_key = '英文成績'
+                if (values[key] !== scoreData[key]) {
+                    differences[chinese_key] = values[key];
+                }
+                newscore[chinese_key] = values[key]
+            }
+        }
         if (scoreData) {
             try {
                 await onScoreUpdate(values, id);
 
             } catch (error) {
                 console.error('Error submitting form:', error);
+            }
+            if (Object.keys(differences).length === 0) {
+                toast({
+                    title: "成功更改成績資料:",
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                            <code className="text-white">無更新</code>
+                        </pre>
+                    ),
+                    duration: 2000,
+                })
+            }
+            else {
+                toast({
+                    title: "成功更改成績資料:",
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                            <code className="text-white">{JSON.stringify(differences, null, 2)}</code>
+                        </pre>
+                    ),
+                    duration: 2000,
+                })
             }
             jsConfetti.addConfetti()
             router.push(`/user/${scoreData.student_id}`)
@@ -116,6 +156,15 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
+            toast({
+                title: "成功新增成績資料:",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(newscore, null, 2)}</code>
+                    </pre>
+                ),
+                duration: 2000,
+            })
             jsConfetti.addConfetti()
             router.push(`/user/${student_id}`)
             router.refresh()
@@ -138,69 +187,18 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="flex flex-col">
-                        <nav className="grid gap-2 text-lg font-medium">
-                            <Link
-                                href="#"
-                                className="flex items-center gap-2 text-lg font-semibold"
-                            >
-                                <Package2 className="h-6 w-6" />
-                                <span className="sr-only">學生管理系統</span>
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Home className="h-5 w-5" />
-                                Dashboard
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                            >
-                                <ShoppingCart className="h-5 w-5" />
-                                Orders
-                                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                                    6
-                                </Badge>
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Package className="h-5 w-5" />
-                                Products
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <Users className="h-5 w-5" />
-                                Customers
-                            </Link>
-                            <Link
-                                href="#"
-                                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                            >
-                                <LineChart className="h-5 w-5" />
-                                Analytics
-                            </Link>
-                        </nav>
-                        <div className="mt-auto">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Upgrade to Pro</CardTitle>
-                                    <CardDescription>
-                                        Unlock all features and get unlimited access to our support
-                                        team.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <Button size="sm" className="w-full">
-                                        Upgrade
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </div>
+                        <SheetContent side="left" className="flex flex-col">
+                            <div className="flex-1">
+                                <Link href="/" className="flex items-center gap-2 font-semibold">
+                                    <Package2 className="h-6 w-6" />
+                                    <span className="">學生管理系統</span>
+                                </Link>
+                                <div className="mt-8 p-4">
+                                    <TimeCard />
+                                </div>
+
+                            </div>
+                        </SheetContent>
                     </SheetContent>
                 </Sheet>
                 <div className="w-full flex-1">

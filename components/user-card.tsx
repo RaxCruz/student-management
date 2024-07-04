@@ -147,7 +147,7 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                 <TableHead className="hidden sm:table-cell">
                                     英文成績
                                 </TableHead>
-                                <TableHead className="hidden sm:table-cell">
+                                <TableHead className="print:hidden hidden sm:table-cell">
                                     <span className="sr-only">Actions</span>
                                 </TableHead>
                             </TableRow>
@@ -178,7 +178,7 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                             {score.english_score}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="sm:table-cell ">
+                                    <TableCell className="print:hidden sm:table-cell ">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button
@@ -203,9 +203,10 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                     </TableCell>
                                 </TableRow>
                             ))}
-                            <TableRow className="">  <TableCell colSpan={6} className=" text-center cursor-pointer w-full" onClick={() => { router.push(`/score/${users[0].student_id}/create`) }}>
-                                <ChevronDown className="inline-block animate-bounce" />
-                            </TableCell></TableRow>
+                            <TableRow className="print:hidden">
+                                <TableCell colSpan={6} className=" text-center cursor-pointer w-full" onClick={() => { router.push(`/score/${users[0].student_id}/create`) }}>
+                                    <ChevronDown className="inline-block animate-bounce" />
+                                </TableCell></TableRow>
                         </TableBody>
                     </Table>
                 </fieldset>
@@ -217,9 +218,9 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                     x-chunk="dashboard-07-chunk-4"
                 >
                     <CardHeader>
-                        <CardTitle>Product Images</CardTitle>
+                        <CardTitle>個人相片</CardTitle>
                         <CardDescription>
-                            Lipsum dolor sit amet, consectetur adipiscing elit
+                            上傳至多三張個人照片
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

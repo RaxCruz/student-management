@@ -15,12 +15,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import Link from "next/link";
 import TimeCard from "@/components/time-card";
+import UserList from "@/components/user-list";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function NavBar() {
   const users = await prisma.user.findMany();
 
   return (
-    <div className="hidden border-r bg-muted/40 md:block skicky top-0 ">
+    <div className="hidden border-r bg-muted/40 md:block skicky top-0">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -36,35 +38,40 @@ export default async function NavBar() {
           <div className="mt-auto p-4">
             <TimeCard />
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>學號</TableHead>
-                <TableHead className="hidden sm:table-cell">姓名</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
+          <ScrollArea className="h-[80vh] w-full ">
+            <Table className="">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>學號</TableHead>
+                  <TableHead className="hidden sm:table-cell">姓名</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {/* {users.map((user) => (
+                <Link href={`/user/${user.student_id}`} key={user.id} legacyBehavior className="">
 
-                <TableRow className="" key={user.id} >
+                  <TableRow className="cursor-pointer"  >
 
-                  <TableCell className="font-medium">
-                    <Link href={`/user/${user.student_id}`} >
+                    <TableCell className="font-medium">
+
                       {user.student_id}
 
-                    </Link>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Link href={`/user/${user.student_id}`} >
+
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+
                       {user.name}
-                    </Link>
-                  </TableCell>
 
-                </TableRow>
+                    </TableCell>
 
-              ))}
-            </TableBody>
-          </Table>
+                  </TableRow>
+
+                </Link>
+              ))} */}
+                <UserList users={users} />
+              </TableBody>
+            </Table>
+          </ScrollArea>
         </div>
       </div>
     </div>
