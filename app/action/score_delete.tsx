@@ -12,7 +12,7 @@ export default async function onScoreDelete(id: any) {
             }
         });
 
-        console.log('Deleted:', deleteResult);
+        //console.log('Deleted:', deleteResult);
     } catch (error) {
         console.error('Error deleting:', error);
     }

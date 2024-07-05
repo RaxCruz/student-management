@@ -27,7 +27,7 @@ const formSchema = z.object({
 })
 
 export default async function onScoreUpdate(values: z.infer<typeof formSchema>, id: any) {
-    console.log(values)
+    console.log("ch8h8h", id)
     try {
         const updated_Score = await prisma.score.update({
             where: {
@@ -42,7 +42,7 @@ export default async function onScoreUpdate(values: z.infer<typeof formSchema>, 
             },
         });
 
-        console.log('Update Score:', updated_Score);
+        //console.log('Update Score:', updated_Score);
     } catch (error) {
         console.error('Error updating user:', error);
     }

@@ -59,7 +59,10 @@ import onScoreUpdate from "@/app/action/score_update";
 import onScoreAdd from "@/app/action/score_add";
 import TimeCard from "./time-card";
 import { toast } from "./ui/use-toast";
-
+import { ScrollArea } from "./ui/scroll-area";
+import { useEffect, useState } from "react";
+import getAllUser from "@/app/action/user_getAll";
+import UserList from "./rwd-user-list";
 const jsConfetti = new JSConfetti()
 
 
@@ -67,7 +70,18 @@ const prisma = new PrismaClient()
 
 export default function CreateUser({ scoreData, id, student_id }: { scoreData: any, id: any, student_id: any }) {
     const router = useRouter()
-    console.log(student_id)
+    const [users, setUsers] = useState(null);
+
+
+    useEffect(() => {
+        const getUsers = async () => {
+
+            const res = await getAllUser()
+            setUsers(res);
+        };
+        getUsers()
+    }, []);
+    //console.log(student_id)
     const formSchema = z.object({
         student_id: z.string(),
         school_year: z.coerce.number().min(1, {
@@ -183,22 +197,32 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
                             className="shrink-0 md:hidden"
                         >
                             <Menu className="h-5 w-5" />
-                            <span className="sr-only">Toggle navigation menu</span>
+                            <span className="sr-only">學生管理系統</span>
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="flex flex-col">
-                        <SheetContent side="left" className="flex flex-col">
-                            <div className="flex-1">
-                                <Link href="/" className="flex items-center gap-2 font-semibold">
-                                    <Package2 className="h-6 w-6" />
-                                    <span className="">學生管理系統</span>
-                                </Link>
-                                <div className="mt-8 p-4">
-                                    <TimeCard />
-                                </div>
-
+                        <div className="flex-1">
+                            <Link href="/" className="flex items-center gap-2 font-semibold">
+                                <Package2 className="h-6 w-6" />
+                                <span className="">學生管理系統</span>
+                            </Link>
+                            <div className="mt-8 p-4">
+                                <TimeCard />
                             </div>
-                        </SheetContent>
+                            <ScrollArea className="h-[70vh] w-full ">
+                                <Table className="">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>學號</TableHead>
+                                            <TableHead className="hidden sm:table-cell">姓名</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <UserList users={users} />
+                                    </TableBody>
+                                </Table>
+                            </ScrollArea>
+                        </div>
                     </SheetContent>
                 </Sheet>
                 <div className="w-full flex-1">
@@ -215,18 +239,22 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
+                        <Button variant="secondary" size="icon" className="rounded-full md:hidden">
                             <CircleUser className="h-5 w-5" />
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuLabel>操作</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
+
+                        <DropdownMenuItem>
+                            <Button size="sm" variant="ghost" type="submit" form="student_form" className="block w-full p-0 m-0 h-auto text-left">
+                                儲存
+                            </Button>
+                        </DropdownMenuItem>
+
+
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
@@ -340,7 +368,7 @@ export default function CreateUser({ scoreData, id, student_id }: { scoreData: a
 
                     </Form>
                 </div>
-                <div className="w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
+                <div className="max-md:hidden w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
                     {/* 上面照片 */}
 
                     {/* 下面按鈕 */}

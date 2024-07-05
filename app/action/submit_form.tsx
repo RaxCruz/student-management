@@ -64,7 +64,7 @@ export default async function onSubmitForm(values: z.infer<typeof formSchema>) {
             },
         });
 
-        console.log('Created user:', newUser);
+        //console.log('Created user:', newUser);
     } catch (error) {
         console.error('Error creating user:', error);
     }

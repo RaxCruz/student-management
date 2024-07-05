@@ -43,10 +43,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import DeleteButton from "@/components/alert-card";
 import { PrismaClient } from "@prisma/client";
 import UserCard from "@/components/user-card";
 import TimeCard from "@/components/time-card";
+import DeleteButton from "@/components/rwd-userDeleteButton";
+import UserList from "@/components/user-list";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const prisma = new PrismaClient();
 
@@ -83,40 +85,22 @@ export default async function UserDetail({ params }: { params: any }) {
                 <Package2 className="h-6 w-6" />
                 <span className="">學生管理系統</span>
               </Link>
-              <div className="mt-8 p-4">
+              <div className="mt-8 p-0">
                 <TimeCard />
               </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>學號</TableHead>
-                    <TableHead className="hidden sm:table-cell">姓名</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {allusers.map((user) => (
-                    <Link href={`/user/${user.student_id}`} legacyBehavior className="" key={user.id}>
-
-                      <TableRow className="cursor-pointer"  >
-
-                        <TableCell className="font-medium">
-
-                          {user.student_id}
-
-
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-
-                          {user.name}
-
-                        </TableCell>
-
-                      </TableRow>
-
-                    </Link>
-                  ))}
-                </TableBody>
-              </Table>
+              <ScrollArea className="h-[70vh] w-full ">
+                <Table className="">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>學號</TableHead>
+                      <TableHead className="hidden sm:table-cell">姓名</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <UserList users={allusers} />
+                  </TableBody>
+                </Table>
+              </ScrollArea>
             </div>
           </SheetContent>
         </Sheet>
@@ -134,18 +118,30 @@ export default async function UserDetail({ params }: { params: any }) {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
+            <Button variant="secondary" size="icon" className="rounded-full md:hidden">
               <CircleUser className="h-5 w-5" />
               <span className="sr-only">Toggle user menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>操作</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/user/create" className="w-full">
+                新增
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/user/${formattedID}/update`} className="w-full">
+                編輯
+              </Link>
+            </DropdownMenuItem>
+
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+
+            <DeleteButton student_id={formattedID} />
+
           </DropdownMenuContent>
         </DropdownMenu>
       </header>

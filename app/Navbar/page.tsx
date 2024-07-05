@@ -34,11 +34,11 @@ export default async function NavBar() {
             <span className="sr-only">Toggle notifications</span>
           </Button>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
           <div className="mt-auto p-4">
             <TimeCard />
           </div>
-          <ScrollArea className="h-[80vh] w-full ">
+          <ScrollArea className="h-[75dvh] w-full ">
             <Table className="">
               <TableHeader>
                 <TableRow>
@@ -47,27 +47,6 @@ export default async function NavBar() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* {users.map((user) => (
-                <Link href={`/user/${user.student_id}`} key={user.id} legacyBehavior className="">
-
-                  <TableRow className="cursor-pointer"  >
-
-                    <TableCell className="font-medium">
-
-                      {user.student_id}
-
-
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-
-                      {user.name}
-
-                    </TableCell>
-
-                  </TableRow>
-
-                </Link>
-              ))} */}
                 <UserList users={users} />
               </TableBody>
             </Table>

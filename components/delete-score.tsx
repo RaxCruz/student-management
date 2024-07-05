@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import JSConfetti from 'js-confetti'
 import { LogOut } from "lucide-react";
 import onScoreDelete from "@/app/action/score_delete";
+import { toast } from "./ui/use-toast";
 
 const jsConfetti = new JSConfetti()
 
@@ -30,6 +31,12 @@ export default function DeleteScore({ id }: { id: any }) {
         } catch (error) {
             console.error('Error delete form:', error);
         }
+        toast({
+            title: "成功刪除成績資料",
+
+            duration: 2000,
+            variant: 'destructive'
+        })
         jsConfetti.addConfetti()
         router.refresh()
 

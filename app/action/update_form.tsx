@@ -67,7 +67,7 @@ export default async function onUpdateForm(values: z.infer<typeof formSchema>, i
             },
         });
 
-        console.log('Update user:', newUser);
+        //console.log('Update user:', newUser);
     } catch (error) {
         console.error('Error Update user:', error);
     }

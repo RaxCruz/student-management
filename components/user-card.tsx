@@ -137,14 +137,14 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                         <TableHeader>
                             <TableRow>
                                 <TableHead>學年</TableHead>
-                                <TableHead className="hidden sm:table-cell">學期</TableHead>
-                                <TableHead className="hidden sm:table-cell">
+                                <TableHead className=" sm:table-cell">學期</TableHead>
+                                <TableHead className=" sm:table-cell">
                                     國文成績
                                 </TableHead>
-                                <TableHead className="hidden sm:table-cell">
+                                <TableHead className=" sm:table-cell">
                                     數學成績
                                 </TableHead>
-                                <TableHead className="hidden sm:table-cell">
+                                <TableHead className=" sm:table-cell">
                                     英文成績
                                 </TableHead>
                                 <TableHead className="print:hidden hidden sm:table-cell">
@@ -192,7 +192,7 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem className="cursor-pointer">
-                                                    <Link href={`/score/${score.id}`} className="w-full">
+                                                    <Link href={`/score/${score.student_id}/${score.id}`} className="w-full">
                                                         <div className="flex items-center"><Edit className="mr-2 h-4 w-4" />編輯</div>
                                                     </Link>
                                                 </DropdownMenuItem>
@@ -211,7 +211,7 @@ export default function UserCard({ users, scores, formattedID }: { users: any, s
                     </Table>
                 </fieldset>
             </form>
-            <div className="w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
+            <div className="max-md:hidden w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
                 {/* 上面照片 */}
                 <Card
                     className="overflow-hidden "

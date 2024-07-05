@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation";
 import JSConfetti from 'js-confetti'
-import { toast } from "./ui/use-toast";
 
 const jsConfetti = new JSConfetti()
 
@@ -24,13 +23,8 @@ export default function DeleteButton({ student_id }: { student_id: any }) {
     const handleDelete = async () => {
 
         try {
-            await onDelete(student_id);
-            toast({
-                title: "成功刪除學生資料",
 
-                duration: 2000,
-                variant: 'destructive'
-            })
+            await onDelete(student_id);
 
         } catch (error) {
             console.error('Error delete form:', error);
@@ -44,7 +38,7 @@ export default function DeleteButton({ student_id }: { student_id: any }) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">刪除</Button>
+                <Button variant="destructive" size="sm" className="w-full p-2 m-0 bg-destructive text-white h-auto block text-left">刪除</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

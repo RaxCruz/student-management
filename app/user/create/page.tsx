@@ -58,6 +58,10 @@ import onUpdateForm from "@/app/action/update_form";
 import TimeCard from "@/components/time-card";
 import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster";
+import UserList from "@/components/user-list";
+import { useEffect, useState } from "react";
+import getAllUser from "@/app/action/user_getAll";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const jsConfetti = new JSConfetti()
 
@@ -66,7 +70,17 @@ const prisma = new PrismaClient()
 
 export default function CreateUser({ studentData, id }: { studentData: any, id: any }) {
     const router = useRouter()
+    const [users, setUsers] = useState(null);
 
+
+    useEffect(() => {
+        const getUsers = async () => {
+
+            const res = await getAllUser()
+            setUsers(res);
+        };
+        getUsers()
+    }, []);
     const formSchema = z.object({
         student_id: z.string().min(4, {
             message: "學生編號須為四位數字",
@@ -134,7 +148,7 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                 if (key == 'phone_2') chinese_key = '電話二'
                 if (key == 'residence_addr') chinese_key = '戶籍地址'
                 if (key == 'student_id') chinese_key = '學生編號'
-                console.log(studentData, "jiji")
+
                 if (!studentData) {
                     newuser[chinese_key] = values[key]
                 }
@@ -217,18 +231,28 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="flex flex-col">
-                        <SheetContent side="left" className="flex flex-col">
-                            <div className="flex-1">
-                                <Link href="/" className="flex items-center gap-2 font-semibold">
-                                    <Package2 className="h-6 w-6" />
-                                    <span className="">學生管理系統</span>
-                                </Link>
-                                <div className="mt-8 p-4">
-                                    <TimeCard />
-                                </div>
-
+                        <div className="flex-1">
+                            <Link href="/" className="flex items-center gap-2 font-semibold">
+                                <Package2 className="h-6 w-6" />
+                                <span className="">學生管理系統</span>
+                            </Link>
+                            <div className="mt-8 p-0">
+                                <TimeCard />
                             </div>
-                        </SheetContent>
+                            <ScrollArea className="h-[70vh] w-full ">
+                                <Table className="">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>學號</TableHead>
+                                            <TableHead className="hidden sm:table-cell">姓名</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <UserList users={users} />
+                                    </TableBody>
+                                </Table>
+                            </ScrollArea>
+                        </div>
                     </SheetContent>
                 </Sheet>
                 <div className="w-full flex-1">
@@ -245,22 +269,29 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
+                        <Button variant="secondary" size="icon" className="rounded-full md:hidden">
                             <CircleUser className="h-5 w-5" />
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuLabel>操作</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
+
+
+
+                        <DropdownMenuItem>
+                            <Button size="sm" variant="ghost" type="submit" form="student_form" className="block w-full p-0 m-0 h-auto text-left">
+                                儲存
+                            </Button>
+                        </DropdownMenuItem>
+
+
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
             <main className="flex flex-1  gap-4 p-4 lg:gap-6 lg:p-6">
+
                 <div className="flex-1 flex flex-col overflow-y-scroll relative scrollbar-hide z-30 p-2">
                     <Form {...form} >
                         <form onSubmit={form.handleSubmit(onMyFormSubmit)} id="student_form">
@@ -425,115 +456,11 @@ export default function CreateUser({ studentData, id }: { studentData: any, id: 
                                 )}
                             />
                         </form>
-                        {/* <fieldset className="grid gap-6 rounded-lg border p-4">
-            <legend className="-ml-1 px-1 text-sm font-medium">個人資料</legend>
-            <div className="grid gap-3">
-              <Label htmlFor="model">學生編號</Label>
-              <input className=" rounded-md border p-[6px]" placeholder="0000"/>
-                
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="temperature">學生姓名</Label>
-              <input className=" rounded-md border p-[6px]" placeholder="王大明"/>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="temperature">身分證號</Label>
-              <input className=" rounded-md border p-[6px]" placeholder="A123456789"/>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-3">
-                <Label htmlFor="top-p">電話一</Label>
-                <input className=" rounded-md border p-[6px]"/>
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="top-k">電話二</Label>
-                <input className=" rounded-md border p-[6px]"/>
-              </div>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="temperature">行動電話</Label>
-              <input className=" rounded-md border p-[6px]"/>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-3">
-                <Label htmlFor="top-p">緊急連絡電話</Label>
-                <input className=" rounded-md border p-[6px]"/>
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="top-k">緊急聯絡人</Label>
-                <input className=" rounded-md border p-[6px]"/>
-              </div>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="temperature">戶籍地址</Label>
-              <input className=" rounded-md border p-[6px]"/>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="temperature">通訊地址</Label>
-              <input className=" rounded-md border p-[6px]"/>
-            </div>
-          </fieldset>
-          <fieldset className="grid gap-6 rounded-lg border p-4">
-            <legend className="-ml-1 px-1 text-sm font-medium">查詢結果</legend>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>學年</TableHead>
-                  <TableHead className="hidden sm:table-cell">學期</TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    國文成績
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    數學成績
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    英文成績
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-               
-                <TableRow className="">
-                <TableCell>
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                </TableRow>
-                <TableRow className="">
-                  <TableCell>
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                  <input className=" rounded-md border p-1"/>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </fieldset> */}
+
 
                     </Form>
                 </div>
-                <div className="w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
+                <div className="max-md:hidden  w-1/3 lg:w-1/3 2xl:w-1/4 flex flex-col gap-4 overflow-hidden sticky top-[84px] h-[90vh]">
                     {/* 上面照片 */}
                     <Card
                         className="overflow-hidden "

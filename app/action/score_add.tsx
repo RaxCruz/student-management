@@ -41,7 +41,7 @@ export default async function onScoreAdd(values: z.infer<typeof formSchema>, stu
             },
         });
 
-        console.log('Created user:', newScore);
+        //console.log('Created user:', newScore);
     } catch (error) {
         console.error('Error creating user:', error);
     }
